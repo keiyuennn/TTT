@@ -20,14 +20,15 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FFFFFF; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FFFFFF; }
         .banner { 
-            background-image: url('https://images.unsplash.com/photo-1538669715515-5c3758c07ba9?q=80&w=2070&auto=format&fit=crop'); 
-            background-size: cover; background-position: center; height: 380px;
+            background-image: url('https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=2000&auto=format&fit=crop'); 
+            background-size: cover; background-position: center; height: 350px;
         }
-        .glass-header { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-radius: 40px 40px 0 0; margin-top: -40px; border-bottom: 1px solid #F3E8FF; }
-        .minimal-card { background: white; border-radius: 32px; border: 1px solid #F3E8FF; }
-        .hotel-card { background: #FDFCFE; border: 2px dashed #E9D5FF; }
+        .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 40px 40px 0 0; margin-top: -40px; border-bottom: 1px solid #F3E8FF; }
+        .minimal-card { background: white; border-radius: 28px; border: 1px solid #F3E8FF; transition: transform 0.2s; }
+        .hotel-card { background: #F9F5FF; border: 2px solid #E9D5FF; position: relative; overflow: hidden; }
+        .hotel-card::after { content: 'HOTEL'; position: absolute; top: 10px; right: -20px; background: #A855F7; color: white; font-size: 8px; font-weight: 900; padding: 2px 20px; transform: rotate(45deg); }
         .date-item.active { background-color: #A855F7; color: white; border-color: #A855F7; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
@@ -37,75 +38,74 @@
 <div id="app" class="max-w-md mx-auto min-h-screen relative pb-28">
     
     <div class="banner relative">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
-        <div class="absolute bottom-16 right-8 text-right text-white">
-            <h1 class="text-7xl font-black tracking-tighter drop-shadow-lg">Seoul</h1>
-            <p class="text-sm font-bold opacity-90 uppercase tracking-[0.2em] mt-2">Apr 11 - Apr 20, 2026</p>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+        <div class="absolute bottom-16 left-8 text-white">
+            <h1 class="text-6xl font-black tracking-tighter">Seoul</h1>
+            <p class="text-xs font-bold opacity-80 uppercase tracking-widest mt-2">2026.04.11 — 04.20</p>
         </div>
     </div>
 
-    <div class="glass-header relative z-10 px-8 py-6 flex justify-between items-center shadow-sm">
-        <h2 class="text-xl font-black text-slate-800">首爾特別市</h2>
+    <div class="glass-header relative z-10 px-6 py-6 flex justify-between items-center shadow-sm">
+        <h2 class="text-lg font-black text-slate-800 flex items-center gap-2">
+             <i data-lucide="map-pin" class="w-5 h-5 text-jp-purple-500"></i> 首爾特別市
+        </h2>
         <div class="flex gap-1 bg-jp-purple-100 p-1 rounded-2xl">
-            <button @click="currentTab = 'itinerary'" :class="['p-3 rounded-xl transition-all', currentTab === 'itinerary' ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
-                <i data-lucide="map" class="w-5 h-5"></i>
-            </button>
-            <button @click="currentTab = 'shop'" :class="['p-3 rounded-xl transition-all', currentTab === 'shop' ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
-                <i data-lucide="shopping-basket" class="w-5 h-5"></i>
-            </button>
-            <button @click="currentTab = 'info'" :class="['p-3 rounded-xl transition-all', currentTab === 'info' ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
-                <i data-lucide="info" class="w-5 h-5"></i>
+            <button v-for="t in tabs" :key="t.id" @click="currentTab = t.id"
+                :class="['p-3 rounded-xl transition-all', currentTab === t.id ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
+                <i :data-lucide="t.icon" class="w-5 h-5"></i>
             </button>
         </div>
     </div>
 
-    <main class="px-6 pt-6">
+    <main class="px-5 pt-4">
         
         <div v-if="currentTab === 'itinerary'" class="space-y-6">
-            <div class="minimal-card p-6 flex items-center justify-between bg-gradient-to-br from-white to-jp-purple-50 border-none shadow-sm">
-                <div class="flex items-center gap-5">
-                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-jp-purple-500 shadow-sm">
-                        <i :data-lucide="currentWeather.icon" class="w-8 h-8"></i>
+            <div class="minimal-card p-5 flex items-center justify-between bg-gradient-to-r from-white to-jp-purple-50 border-none shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-jp-purple-500 shadow-sm">
+                        <i :data-lucide="currentWeather.icon" class="w-7 h-7"></i>
                     </div>
                     <div>
-                        <p class="text-[10px] font-black text-jp-purple-400 uppercase tracking-widest">{{ selectedDateDisplay }} · WEATHER</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ selectedDateDisplay }} WEATHER</p>
                         <div class="flex items-baseline gap-1">
                             <span class="text-3xl font-black text-slate-800">{{ currentWeather.low }}°</span>
                             <span class="text-sm font-bold text-slate-300">/ {{ currentWeather.high }}°C</span>
                         </div>
                     </div>
                 </div>
-                <div class="bg-jp-purple-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase">{{ currentWeather.desc }}</div>
+                <div class="text-right">
+                    <span class="bg-jp-purple-500 text-white text-[9px] font-black px-2 py-1 rounded-lg">{{ currentWeather.desc }}</span>
+                </div>
             </div>
 
             <div class="flex gap-3 overflow-x-auto no-scrollbar py-1">
                 <button v-for="day in days" :key="day.date" @click="selectedDate = day.date"
-                    :class="['flex-shrink-0 w-14 h-16 rounded-2xl flex flex-col items-center justify-center transition-all border', selectedDate === day.date ? 'date-item active' : 'bg-white text-slate-300 border-slate-100']">
+                    :class="['flex-shrink-0 w-12 h-16 rounded-2xl flex flex-col items-center justify-center transition-all border', selectedDate === day.date ? 'date-item active shadow-lg shadow-purple-200' : 'bg-white text-slate-300 border-slate-100']">
                     <span class="text-[9px] font-black uppercase">{{ day.weekday }}</span>
-                    <span class="text-xl font-black">{{ day.dayNum }}</span>
+                    <span class="text-lg font-black">{{ day.dayNum }}</span>
                 </button>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-3">
                 <div class="minimal-card hotel-card p-5 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-jp-purple-500 shadow-sm">
                         <i data-lucide="home" class="w-6 h-6"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="text-[10px] font-black text-jp-purple-400 uppercase">當前住宿</p>
-                        <h4 class="text-lg font-bold text-slate-800 leading-tight">{{ currentHotel.name }}</h4>
-                        <p class="text-[11px] text-slate-400 mt-1 line-clamp-1">📍 {{ currentHotel.addr }}</p>
+                        <p class="text-[10px] font-black text-jp-purple-400 uppercase tracking-tighter">Current Lodging</p>
+                        <h4 class="text-md font-black text-slate-800 leading-tight">{{ currentHotel.name }}</h4>
+                        <p class="text-[11px] text-slate-400 mt-1">📍 {{ currentHotel.addr }}</p>
                     </div>
                 </div>
 
                 <div v-for="item in filteredItinerary" :key="item.id" @click="openEditModal(item)"
-                    class="minimal-card p-5 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400">
-                        <i :data-lucide="getCategoryIcon(item.category)" class="w-6 h-6"></i>
+                    class="minimal-card p-5 flex items-center gap-4 hover:border-jp-purple-200">
+                    <div class="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300">
+                        <i :data-lucide="getCategoryIcon(item.category)" class="w-5 h-5"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="text-[10px] font-black text-slate-300 uppercase">{{ item.time }} · {{ item.category }}</p>
-                        <h4 class="text-lg font-bold text-slate-700 leading-tight">{{ item.name }}</h4>
+                        <p class="text-[10px] font-black text-slate-300 uppercase tracking-tighter">{{ item.time }}</p>
+                        <h4 class="text-md font-bold text-slate-700">{{ item.name }}</h4>
                         <p v-if="item.note" class="text-xs text-slate-400 mt-1">{{ item.note }}</p>
                     </div>
                 </div>
@@ -114,42 +114,42 @@
 
         <div v-if="currentTab === 'shop'" class="space-y-6">
             <div class="flex justify-between items-center px-2">
-                <h3 class="text-2xl font-black text-slate-800">Shopping List</h3>
-                <button @click="addShopItem" class="w-10 h-10 bg-jp-purple-100 text-jp-purple-500 rounded-full flex items-center justify-center font-bold">+</button>
+                <h3 class="text-xl font-black text-slate-800 uppercase tracking-tighter">Shopping List</h3>
+                <button @click="addShopItem" class="w-8 h-8 bg-jp-purple-100 text-jp-purple-500 rounded-full flex items-center justify-center font-black">+</button>
             </div>
             <div class="space-y-3">
-                <div v-for="(item, idx) in shopList" :key="idx" class="minimal-card p-5 flex items-center gap-4">
-                    <input type="checkbox" v-model="item.done" class="w-6 h-6 rounded-full border-2 border-jp-purple-200 text-jp-purple-500 focus:ring-0">
-                    <input v-model="item.text" class="flex-1 bg-transparent border-none font-bold text-slate-700 focus:ring-0" :class="{'line-through opacity-30': item.done}">
+                <div v-for="(item, idx) in shopList" :key="idx" class="minimal-card p-4 flex items-center gap-4">
+                    <input type="checkbox" v-model="item.done" class="w-5 h-5 rounded-full border-2 border-jp-purple-200 text-jp-purple-500 focus:ring-0">
+                    <input v-model="item.text" class="flex-1 bg-transparent border-none font-bold text-slate-600 focus:ring-0" :class="{'line-through opacity-30': item.done}">
                     <button @click="shopList.splice(idx, 1)" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                 </div>
             </div>
         </div>
 
         <div v-if="currentTab === 'info'" class="space-y-8 pb-10">
-            <div class="minimal-card p-8 bg-jp-purple-600 text-white border-none shadow-xl">
-                <h4 class="text-xs font-black opacity-70 uppercase mb-4 tracking-widest">Exchange: KRW ➔ HKD</h4>
-                <div class="flex items-center gap-4">
-                    <span class="text-xl font-bold opacity-50">₩</span>
-                    <input type="number" v-model="krw" class="bg-transparent border-none text-4xl font-black focus:ring-0 p-0 w-full placeholder-white/30" placeholder="0">
-                </div>
-                <div class="mt-6 pt-6 border-t border-white/10 flex justify-between items-end">
-                    <div>
-                        <p class="text-[10px] font-bold opacity-50 uppercase mb-1">Estimated Result</p>
-                        <span class="text-4xl font-black">HK$ {{ (krw * 0.0056).toFixed(2) }}</span>
+            <div class="minimal-card p-8 bg-jp-purple-600 text-white border-none shadow-xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h4 class="text-xs font-black opacity-60 uppercase mb-4 tracking-widest">Exchange: KRW ➔ HKD</h4>
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-xl font-bold opacity-40">₩</span>
+                        <input type="number" v-model="krw" class="bg-transparent border-none text-5xl font-black focus:ring-0 p-0 w-full placeholder-white/20" placeholder="0">
                     </div>
-                    <i data-lucide="trending-up" class="w-8 h-8 opacity-20 mb-1"></i>
+                    <div class="flex justify-between items-end border-t border-white/10 pt-6">
+                        <div>
+                            <p class="text-[9px] font-black opacity-50 uppercase mb-1">Total in Hong Kong Dollars</p>
+                            <span class="text-4xl font-black tracking-tighter">HK$ {{ (krw * 0.0056).toFixed(2) }}</span>
+                        </div>
+                        <i data-lucide="banknote" class="w-10 h-10 opacity-20"></i>
+                    </div>
                 </div>
             </div>
 
             <section class="space-y-4">
-                <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 px-1">
-                    <i data-lucide="phone-forwarded" class="w-4 h-4"></i> Emergency Help
-                </h4>
+                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Emergency Help</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <a v-for="tel in emergency" :key="tel.num" :href="'tel:' + tel.num" class="minimal-card p-5 text-center">
-                        <span class="text-[10px] font-bold text-slate-400 block mb-1">{{ tel.label }}</span>
-                        <span class="text-2xl font-black" :class="tel.urgent ? 'text-red-500' : 'text-jp-purple-500'">{{ tel.num }}</span>
+                    <a v-for="t in emergency" :key="t.num" :href="'tel:'+t.num" class="minimal-card p-5 text-center active:scale-95 transition-transform">
+                        <span class="text-[10px] font-bold text-slate-300 block mb-1 uppercase">{{ t.label }}</span>
+                        <span class="text-2xl font-black" :class="t.urgent ? 'text-red-500' : 'text-jp-purple-500'">{{ t.num }}</span>
                     </a>
                 </div>
             </section>
@@ -160,22 +160,22 @@
         <i data-lucide="plus" class="w-8 h-8"></i>
     </button>
 
-    <div v-if="showModal" class="fixed inset-0 bg-black/60 z-[100] flex items-end backdrop-blur-sm">
-        <div class="w-full bg-white rounded-t-[40px] p-8 pb-12 shadow-2xl animate-slide-up">
-            <h3 class="text-xl font-black mb-6 text-slate-800">{{ isEditing ? '修改行程' : '新增計畫' }}</h3>
+    <div v-if="showModal" class="fixed inset-0 bg-black/70 z-[100] flex items-end backdrop-blur-sm">
+        <div class="w-full bg-white rounded-t-[40px] p-8 pb-12 animate-slide-up shadow-2xl">
+            <h3 class="text-xl font-black mb-6 text-slate-800">{{ isEditing ? 'Edit Task' : 'New Plan' }}</h3>
             <div class="space-y-4">
-                <input v-model="itForm.name" placeholder="活動或地點名稱" class="w-full p-4 bg-slate-50 rounded-2xl border-none font-bold">
+                <input v-model="itForm.name" placeholder="名稱" class="w-full p-4 bg-slate-50 rounded-2xl border-none font-bold">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="time" v-model="itForm.time" class="p-4 bg-slate-50 rounded-2xl border-none font-bold">
-                    <select v-model="itForm.category" class="p-4 bg-slate-50 rounded-2xl border-none font-bold text-jp-purple-500">
+                    <input type="time" v-model="itForm.time" class="p-4 bg-slate-50 rounded-2xl border-none font-bold text-jp-purple-600">
+                    <select v-model="itForm.category" class="p-4 bg-slate-50 rounded-2xl border-none font-bold">
                         <option>景點</option><option>美食</option><option>購物</option><option>航班</option>
                     </select>
                 </div>
-                <textarea v-model="itForm.note" placeholder="詳細備註..." class="w-full p-4 bg-slate-50 rounded-2xl border-none text-sm h-24 resize-none"></textarea>
+                <textarea v-model="itForm.note" placeholder="備註細節..." class="w-full p-4 bg-slate-50 rounded-2xl border-none text-sm h-24 resize-none"></textarea>
                 <div class="flex gap-3 pt-4">
                     <button v-if="isEditing" @click="deleteItem" class="flex-1 py-4 font-bold text-red-400">刪除</button>
-                    <button @click="showModal = false" class="flex-1 py-4 font-bold text-slate-400">取消</button>
-                    <button @click="saveItem" class="flex-[2] py-4 bg-jp-purple-600 text-white rounded-2xl font-bold shadow-lg">確認儲存</button>
+                    <button @click="showModal = false" class="flex-1 py-4 font-bold text-slate-300">取消</button>
+                    <button @click="saveItem" class="flex-[2] py-4 bg-jp-purple-600 text-white rounded-2xl font-black shadow-lg">儲存內容</button>
                 </div>
             </div>
         </div>
@@ -194,48 +194,49 @@ createApp({
         const isEditing = ref(false);
         const itForm = ref({ id: null, name: '', time: '09:00', category: '景點', note: '' });
 
-        const days = Array.from({length: 10}, (_, i) => {
+        const tabs = [ {id:'itinerary', icon:'calendar'}, {id:'shop', icon:'shopping-basket'}, {id:'info', icon:'info'} ];
+        const days = Array.from({length:10}, (_, i) => {
             const d = new Date(2026, 3, 11 + i);
-            return { weekday: d.toLocaleDateString('en-US', {weekday: 'short'}), dayNum: 11 + i, date: `2026-04-${11 + i}` };
+            return { weekday: d.toLocaleDateString('en-US', {weekday:'short'}), dayNum: 11+i, date: `2026-04-${11+i}` };
         });
 
         const emergency = [
-            { label: '警察局', num: '112', urgent: true },
-            { label: '火警/救護', num: '119', urgent: true },
-            { label: '旅遊翻譯', num: '1330', urgent: false },
-            { label: '醫療諮詢', num: '1339', urgent: false }
+            { label: 'Police', num: '112', urgent: true },
+            { label: 'Fire/Ambulance', num: '119', urgent: true },
+            { label: 'Tourist Guide', num: '1330', urgent: false },
+            { label: 'Medical Aid', num: '1339', urgent: false }
         ];
 
-        // 飯店對照表
-        const hotelInfo = {
-            '2026-04-11': { name: 'GLAD Yeouido', addr: '汝矣島格萊德飯店' },
-            '2026-04-12': { name: 'GLAD Yeouido', addr: '汝矣島格萊德飯店' },
-            '2026-04-13': { name: 'Seoul Vamos Hotel', addr: '現場需支付 20,000 韓元現金' },
+        // 飯店地圖邏輯
+        const hotelMap = {
+            '2026-04-11': { name: 'Glad汝矣島', addr: '汝矣島格萊德飯店 (入住日)' },
+            '2026-04-12': { name: 'Glad汝矣島', addr: '汝矣島格萊德飯店' },
+            '2026-04-13': { name: 'Seoul Vamos Hotel', addr: '現場需付 20,000 韓元現金' },
             '2026-04-14': { name: 'Seoul Vamos Hotel', addr: '首爾瓦莫斯酒店' },
             '2026-04-15': { name: 'Seoul Vamos Hotel', addr: '首爾瓦莫斯酒店' },
-            '2026-04-16': { name: 'Airbnb 延南洞', addr: '마포구 연남로1길 14-9 (201號)' },
+            '2026-04-16': { name: 'Airbnb 延南洞', addr: '서울시 마포구 연남로1길 14-9 (201號)' },
             '2026-04-17': { name: 'Airbnb 延南洞', addr: '延南洞 201號' },
             '2026-04-18': { name: 'Airbnb 延南洞', addr: '延南洞 201號' },
             '2026-04-19': { name: 'Airbnb 延南洞', addr: '延南洞 201號' },
-            '2026-04-20': { name: 'Home Sweet Home', addr: '回程日' }
+            '2026-04-20': { name: 'Home Sweet Home', addr: '準備回程' }
         };
 
-        const currentHotel = computed(() => hotelInfo[selectedDate.value] || { name: '未設定', addr: '-' });
+        const currentHotel = computed(() => hotelMap[selectedDate.value] || {name:'-', addr:'-'});
 
-        const defaultItinerary = [
-            { id: 1, date: '2026-04-11', category: '航班', time: '01:25', name: '去程：HKG ➔ ICN (T2)', note: '凌晨航班，請提前於 4/10 晚間出發' },
+        const defaultIt = [
+            { id: 1, date: '2026-04-11', category: '航班', time: '01:25', name: '去程：HKG ➔ ICN (T2)', note: '凌晨航班，請於 4/10 深夜抵達機場' },
             { id: 2, date: '2026-04-20', category: '航班', time: '21:30', name: '回程：ICN (T2) ➔ HKG', note: '仁川機場第二航廈' }
         ];
 
-        const itineraryData = ref(JSON.parse(localStorage.getItem('seoul_v5_it')) || defaultItinerary);
-        const shopList = ref(JSON.parse(localStorage.getItem('seoul_v5_sh')) || [{text: 'Olive Young 護膚品', done: false}]);
+        const itineraryData = ref(JSON.parse(localStorage.getItem('seoul_v6_data')) || defaultIt);
+        const shopList = ref(JSON.parse(localStorage.getItem('seoul_v6_shop')) || [{text:'Olive Young', done:false}]);
 
-        watch(itineraryData, (v) => localStorage.setItem('seoul_v5_it', JSON.stringify(v)), {deep: true});
-        watch(shopList, (v) => localStorage.setItem('seoul_v5_sh', JSON.stringify(v)), {deep: true});
+        watch(itineraryData, (v) => localStorage.setItem('seoul_v6_data', JSON.stringify(v)), {deep:true});
+        watch(shopList, (v) => localStorage.setItem('seoul_v6_shop', JSON.stringify(v)), {deep:true});
 
         const currentWeather = computed(() => {
-            const data = { '2026-04-11': { low: 7, high: 16, icon: 'sun', desc: 'Sunny' } };
-            return data[selectedDate.value] || { low: 8, high: 15, icon: 'cloud', desc: 'Cloudy' };
+            const w = {'2026-04-11': {low:7, high:16, icon:'sun', desc:'Sunny'}};
+            return w[selectedDate.value] || {low:8, high:15, icon:'cloud', desc:'Cloudy'};
         });
 
         const selectedDateDisplay = computed(() => {
@@ -248,28 +249,28 @@ createApp({
         });
 
         const getCategoryIcon = (cat) => {
-            const map = { '美食': 'utensils', '景點': 'camera', '購物': 'shopping-bag', '航班': 'plane' };
-            return map[cat] || 'map-pin';
+            const m = {'美食':'utensils', '景點':'camera', '購物':'shopping-bag', '航班':'plane'};
+            return m[cat] || 'map-pin';
         };
 
-        const openAddModal = () => { isEditing.value = false; itForm.value = { id: Date.now(), name: '', time: '12:00', category: '景點', note: '' }; showModal.value = true; };
-        const openEditModal = (item) => { isEditing.value = true; itForm.value = { ...item }; showModal.value = true; };
+        const openAddModal = () => { isEditing.value=false; itForm.value={id:Date.now(), name:'', time:'12:00', category:'景點', note:''}; showModal.value=true; };
+        const openEditModal = (item) => { isEditing.value=true; itForm.value={...item}; showModal.value=true; };
         const saveItem = () => {
             if(isEditing.value) {
                 const idx = itineraryData.value.findIndex(i => i.id === itForm.value.id);
-                itineraryData.value[idx] = { ...itForm.value };
+                itineraryData.value[idx] = {...itForm.value};
             } else {
-                itineraryData.value.push({ ...itForm.value, date: selectedDate.value });
+                itineraryData.value.push({...itForm.value, date: selectedDate.value});
             }
             showModal.value = false;
         };
-        const deleteItem = () => { itineraryData.value = itineraryData.value.filter(i => i.id !== itForm.value.id); showModal.value = false; };
-        const addShopItem = () => shopList.value.push({text: '新購物項目', done: false});
+        const deleteItem = () => { itineraryData.value = itineraryData.value.filter(i => i.id !== itForm.value.id); showModal.value=false; };
+        const addShopItem = () => shopList.value.push({text:'New Item', done:false});
 
         onMounted(() => lucide.createIcons());
         watch([currentTab, selectedDate, showModal], () => setTimeout(() => lucide.createIcons(), 10));
 
-        return { currentTab, days, selectedDate, krw, shopList, emergency, currentWeather, selectedDateDisplay, filteredItinerary, currentHotel, itForm, showModal, isEditing, openAddModal, openEditModal, saveItem, deleteItem, getCategoryIcon, addShopItem };
+        return { currentTab, tabs, days, selectedDate, krw, shopList, emergency, currentHotel, currentWeather, selectedDateDisplay, filteredItinerary, itForm, showModal, isEditing, openAddModal, openEditModal, saveItem, deleteItem, getCategoryIcon, addShopItem };
     }
 }).mount('#app');
 </script>
