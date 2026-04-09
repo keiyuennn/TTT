@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Seoul Trip | 2026</title>
+    <title>Seoul 2026 | Trip Planner</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -12,74 +12,42 @@
             theme: {
                 extend: {
                     colors: {
-                        'jp-purple': { 50: '#F8F7FF', 100: '#F3E8FF', 200: '#E9D5FF', 500: '#A855F7', 600: '#9333EA' }
+                        'jp-purple': { 50: '#FDFCFE', 100: '#F3E8FF', 200: '#E9D5FF', 500: '#A855F7', 600: '#9333EA' }
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=SF+Pro+Display:wght@400;700;900&display=swap');
-        body { font-family: 'SF Pro Display', 'Noto Sans TC', sans-serif; background-color: #F8F7FF; -webkit-font-smoothing: antialiased; }
-        header.banner { 
-            background-image: url('https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=2070&auto=format&fit=crop'); 
-            background-size: cover; 
-            background-position: center; 
-        }
-        .glass-nav { background: rgba(248, 247, 255, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid rgba(233, 213, 255, 0.3); }
-        .minimal-card { background: white; border-radius: 28px; border: 1px solid #F3E8FF; box-shadow: 0 4px 12px -2px rgba(168, 85, 247, 0.05); transition: all 0.3s ease; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFCFE; -webkit-font-smoothing: antialiased; }
+        .glass-nav { background: rgba(253, 252, 254, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .minimal-card { background: white; border-radius: 28px; border: 1px solid #F3E8FF; box-shadow: 0 4px 15px -3px rgba(168, 85, 247, 0.05); }
         .date-item.active { background-color: #A855F7; color: white; box-shadow: 0 8px 20px -5px rgba(168, 85, 247, 0.3); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body>
 
-<div id="app" class="max-w-md mx-auto min-h-screen relative pb-28 overflow-x-hidden">
+<div id="app" class="max-w-md mx-auto min-h-screen relative pb-28">
     
-    <header class="banner relative w-full h-72 z-10">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#F8F7FF] via-transparent to-black/20"></div>
-        <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
-            <h1 class="text-5xl font-black text-slate-800 drop-shadow-sm tracking-tighter">Seoul</h1>
-            <p class="text-sm text-jp-purple-600 font-bold uppercase tracking-widest mt-1">Apr 11 - Apr 20, 2026</p>
-        </div>
+    <header class="p-8 pt-12">
+        <h1 class="text-5xl font-black text-slate-800 tracking-tighter">Seoul</h1>
+        <p class="text-jp-purple-500 font-bold uppercase tracking-widest text-xs mt-1">2026.04.11 — 04.20</p>
     </header>
 
-    <nav class="sticky top-0 z-50 px-6 py-4 glass-nav flex justify-between items-center rounded-t-[40px] -mt-10">
-        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-            <i data-lucide="map-pin" class="w-5 h-5 text-jp-purple-500"></i> 首爾
-        </h2>
-        <div class="flex gap-1 bg-jp-purple-100 p-1 rounded-xl">
+    <nav class="sticky top-0 z-50 px-6 py-4 glass-nav flex justify-between items-center rounded-t-[40px]">
+        <div class="flex gap-1 bg-jp-purple-100 p-1 rounded-2xl">
             <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id"
-                :class="['p-2.5 rounded-lg transition-all', currentTab === tab.id ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
-                <i :data-lucide="tab.icon" class="w-5 h-5"></i>
+                :class="['px-6 py-2 rounded-xl transition-all font-bold text-sm', currentTab === tab.id ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
+                {{ tab.name }}
             </button>
         </div>
     </nav>
 
-    <main class="px-5 pt-6 z-20 relative">
+    <main class="px-5 mt-6">
         
-        <div v-if="currentTab === 'itinerary'" class="animate-slide-up space-y-6 pb-10">
-            
-            <section class="minimal-card p-6 flex items-center justify-between border-none bg-gradient-to-br from-white to-jp-purple-50">
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-white rounded-2xl shadow-sm text-jp-purple-500">
-                        <i :data-lucide="currentWeather.icon" class="w-8 h-8"></i>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-black text-jp-purple-400 uppercase tracking-widest">{{ selectedDateDisplay }} WEATHER</p>
-                        <div class="flex items-baseline gap-1">
-                            <span class="text-2xl font-black text-slate-800">{{ currentWeather.low }}°</span>
-                            <span class="text-sm font-bold text-slate-300">/ {{ currentWeather.high }}°C</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <span class="text-[10px] font-black text-white bg-jp-purple-500 px-3 py-1 rounded-full">{{ currentWeather.desc }}</span>
-                </div>
-            </section>
-
+        <div v-if="currentTab === 'itinerary'" class="space-y-6">
             <div class="flex gap-3 overflow-x-auto no-scrollbar py-2">
                 <button v-for="day in days" :key="day.date" @click="selectedDate = day.date"
                     :class="['flex-shrink-0 w-12 h-16 rounded-2xl flex flex-col items-center justify-center transition-all border border-slate-100', selectedDate === day.date ? 'date-item active' : 'bg-white text-slate-400']">
@@ -90,82 +58,63 @@
 
             <div class="space-y-3">
                 <div v-for="item in currentDayItinerary" :key="item.id" @click="openEditModal(item)"
-                    class="minimal-card p-5 flex items-center gap-4 hover:border-jp-purple-200">
-                    <div class="w-12 h-12 rounded-2xl bg-jp-purple-50 flex items-center justify-center text-jp-purple-500">
-                        <i :data-lucide="getCategoryIcon(item.category)" class="w-6 h-6"></i>
+                    class="minimal-card p-5 flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-2xl bg-jp-purple-50 flex items-center justify-center text-jp-purple-500">
+                        <i :data-lucide="getCategoryIcon(item.category)" class="w-5 h-5"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="text-[10px] font-bold text-jp-purple-400 uppercase tracking-tighter">{{ item.time }} · {{ item.category }}</p>
-                        <h4 class="text-md font-bold text-slate-800 leading-tight">{{ item.name }}</h4>
-                        <p v-if="item.note" class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">💬 {{ item.note }}</p>
+                        <p class="text-[10px] font-bold text-jp-purple-400 uppercase tracking-tighter">{{ item.time }}</p>
+                        <h4 class="text-md font-bold text-slate-800">{{ item.name }}</h4>
+                        <p v-if="item.note" class="text-[11px] text-slate-400 mt-0.5">{{ item.note }}</p>
                     </div>
-                    <a v-if="item.mapUrl" :href="item.mapUrl" target="_blank" @click.stop
-                        class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-jp-purple-100 hover:text-jp-purple-500 transition-colors">
-                        <i data-lucide="map" class="w-5 h-5"></i>
-                    </a>
-                </div>
-                <div v-if="currentDayItinerary.length === 0" class="py-10 text-center">
-                    <i data-lucide="sparkles" class="w-8 h-8 text-jp-purple-200 mx-auto mb-2"></i>
-                    <p class="text-sm text-slate-400 font-medium">今天還沒有安排行程喔！</p>
+                    <i v-if="item.note" data-lucide="chevron-right" class="w-4 h-4 text-slate-200"></i>
                 </div>
             </div>
         </div>
 
-        <div v-if="currentTab === 'info'" class="space-y-6 animate-slide-up pb-20">
-            <section class="minimal-card p-7 bg-jp-purple-600 text-white shadow-xl border-none">
-                <h4 class="text-xs font-black opacity-80 uppercase mb-4 flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> KRW ➔ TWD</h4>
-                <div class="space-y-3">
-                    <input type="number" v-model="krw" class="w-full bg-white/10 rounded-2xl px-5 py-4 font-black text-2xl border-none text-white placeholder-white/40 focus:ring-2 focus:ring-white/30" placeholder="₩ 0">
-                    <div class="w-full bg-white rounded-2xl px-5 py-5 font-black text-2xl text-jp-purple-600 flex justify-between items-center">
-                        <span>{{ (krw * 0.024).toFixed(2) }}</span>
-                        <span class="text-jp-purple-300 text-sm font-bold tracking-widest uppercase">TWD</span>
-                    </div>
+        <div v-if="currentTab === 'tools'" class="space-y-6">
+            <div class="minimal-card p-7 bg-jp-purple-600 text-white shadow-xl border-none">
+                <h4 class="text-xs font-black opacity-80 uppercase mb-4">KRW ➔ TWD</h4>
+                <input type="number" v-model="krw" class="w-full bg-white/20 rounded-2xl px-5 py-4 font-black text-2xl border-none text-white placeholder-white/40 focus:ring-0" placeholder="₩ 0">
+                <div class="mt-4 flex justify-between items-baseline px-1">
+                    <span class="text-4xl font-black">NT$ {{ (krw * 0.024).toFixed(0) }}</span>
+                    <span class="text-xs font-bold opacity-60">台幣換算</span>
                 </div>
-            </section>
-
-            <section class="space-y-3">
-                <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Emergency Contacts</h4>
-                <div class="grid grid-cols-2 gap-3">
-                    <a href="tel:112" class="minimal-card p-4 flex flex-col items-center gap-1 border-red-50">
-                        <span class="text-[10px] font-bold text-slate-400">警察局</span>
-                        <span class="text-xl font-black text-red-500">112</span>
-                    </a>
-                    <a href="tel:119" class="minimal-card p-4 flex flex-col items-center gap-1 border-red-50">
-                        <span class="text-[10px] font-bold text-slate-400">救護車/火警</span>
-                        <span class="text-xl font-black text-red-500">119</span>
-                    </a>
-                    <a href="tel:1330" class="minimal-card p-4 flex flex-col items-center gap-1 col-span-2">
-                        <span class="text-[10px] font-bold text-slate-400">觀光公社 (中文翻譯)</span>
-                        <span class="text-xl font-black text-jp-purple-500">1330</span>
-                    </a>
-                </div>
-            </section>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <a href="tel:112" class="minimal-card p-4 text-center border-red-50">
+                    <span class="text-[10px] font-black text-slate-400 block mb-1">警察局</span>
+                    <span class="text-xl font-black text-red-500">112</span>
+                </a>
+                <a href="tel:119" class="minimal-card p-4 text-center border-red-50">
+                    <span class="text-[10px] font-black text-slate-400 block mb-1">急救/火警</span>
+                    <span class="text-xl font-black text-red-500">119</span>
+                </a>
+            </div>
         </div>
     </main>
 
-    <button @click="openAddModal" class="fixed bottom-10 right-8 w-16 h-16 bg-jp-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center z-[100] active:scale-90 transition-all">
+    <button @click="openAddModal" class="fixed bottom-10 right-8 w-16 h-16 bg-jp-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 active:scale-95 transition-transform">
         <i data-lucide="plus" class="w-8 h-8"></i>
     </button>
 
-    <div v-if="showModal" class="fixed inset-0 bg-slate-900/60 z-[200] flex items-end backdrop-blur-sm">
+    <div v-if="showModal" class="fixed inset-0 bg-slate-900/60 z-[100] flex items-end backdrop-blur-sm">
         <div class="w-full bg-white rounded-t-[40px] p-8 pb-10 shadow-2xl animate-slide-up">
-            <div class="w-12 h-1.5 bg-slate-100 rounded-full mx-auto mb-6"></div>
-            <h3 class="text-xl font-bold mb-6 text-slate-800">{{ isEditing ? '修改行程' : '新增計畫' }}</h3>
+            <h3 class="text-xl font-bold mb-6 text-slate-800">{{ isEditing ? '修改計畫' : '新增計畫' }}</h3>
             <div class="space-y-4">
-                <input v-model="itForm.name" placeholder="目的地名稱" class="w-full p-4 bg-slate-50 rounded-2xl border-none font-bold focus:ring-2 focus:ring-jp-purple-200">
+                <input v-model="itForm.name" placeholder="名稱" class="w-full p-4 bg-slate-50 rounded-2xl border-none font-bold">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="time" v-model="itForm.time" class="p-4 bg-slate-50 rounded-2xl border-none font-bold">
+                    <input type="time" v-model="itForm.time" class="p-4 bg-slate-50 rounded-2xl border-none font-bold text-jp-purple-600">
                     <select v-model="itForm.category" class="p-4 bg-slate-50 rounded-2xl border-none font-bold text-jp-purple-500">
-                        <option>景點</option><option>美食</option><option>住宿</option><option>航班</option><option>購物</option>
+                        <option>景點</option><option>美食</option><option>住宿</option><option>航班</option>
                     </select>
                 </div>
-                <input v-model="itForm.mapUrl" placeholder="Google Maps 分享連結" class="w-full p-4 bg-slate-50 rounded-2xl border-none text-sm">
-                <textarea v-model="itForm.note" placeholder="備註..." class="w-full p-4 bg-slate-50 rounded-2xl border-none text-sm h-20 resize-none"></textarea>
-                
-                <div class="flex gap-3 pt-4">
-                    <button v-if="isEditing" @click="deleteItem" class="flex-1 py-4 font-bold text-red-400 bg-red-50 rounded-2xl">刪除</button>
+                <textarea v-model="itForm.note" placeholder="備註或地址..." class="w-full p-4 bg-slate-50 rounded-2xl border-none text-sm h-24 resize-none"></textarea>
+                <div class="flex gap-3 pt-2">
+                    <button v-if="isEditing" @click="deleteItem" class="flex-1 py-4 font-bold text-red-400">刪除</button>
                     <button @click="showModal = false" class="flex-1 py-4 font-bold text-slate-400">取消</button>
-                    <button @click="saveItem" class="flex-[2] py-4 bg-jp-purple-600 text-white rounded-2xl font-bold shadow-lg">儲存行程</button>
+                    <button @click="saveItem" class="flex-[2] py-4 bg-jp-purple-600 text-white rounded-2xl font-bold">儲存</button>
                 </div>
             </div>
         </div>
@@ -182,72 +131,41 @@ createApp({
         const krw = ref(0);
         const showModal = ref(false);
         const isEditing = ref(false);
-        const itForm = ref({ id: null, name: '', time: '09:00', category: '景點', mapUrl: '', note: '' });
+        const itForm = ref({ id: null, name: '', time: '09:00', category: '景點', note: '' });
 
-        const tabs = [ { id: 'itinerary', icon: 'calendar' }, { id: 'info', icon: 'info' } ];
-
+        const tabs = [ { id: 'itinerary', name: '行程' }, { id: 'tools', name: '工具箱' } ];
         const days = Array.from({length: 10}, (_, i) => {
             const date = new Date(2026, 3, 11 + i);
-            return { 
-                weekday: date.toLocaleDateString('en-US', {weekday: 'short'}), 
-                dayNum: 11 + i, 
-                date: `2026-04-${11 + i}` 
-            };
+            return { weekday: date.toLocaleDateString('en-US', {weekday: 'short'}), dayNum: 11 + i, date: `2026-04-${11 + i}` };
         });
 
-        // 初始預設資料 (含飯店與航班)
-        const defaultItinerary = [
-            { id: 10, date: '2026-04-11', category: '航班', time: '08:00', name: '去程航班 ✈️', note: '仁川機場', mapUrl: 'https://maps.app.goo.gl/9uG5CqZqB7E1tZ8S9' },
-            { id: 11, date: '2026-04-11', category: '住宿', time: '15:00', name: 'Glad汝矣島 (Check-in)', mapUrl: 'https://maps.app.goo.gl/9uG5CqZqB7E1tZ8S9' },
-            { id: 13, date: '2026-04-13', category: '住宿', time: '11:00', name: 'Glad汝矣島 (Check-out)', mapUrl: 'https://maps.app.goo.gl/9uG5CqZqB7E1tZ8S9' },
-            { id: 14, date: '2026-04-13', category: '住宿', time: '15:00', name: 'Seoul Vamos Hotel (Check-in)', mapUrl: 'https://maps.app.goo.gl/vJbJgQ3A2oQn2QW3A' },
-            { id: 16, date: '2026-04-16', category: '住宿', time: '11:00', name: 'Seoul Vamos Hotel (Check-out)', mapUrl: 'https://maps.app.goo.gl/vJbJgQ3A2oQn2QW3A' },
-            { id: 17, date: '2026-04-16', category: '住宿', time: '15:00', name: 'Airbnb 延南洞 (Check-in)', note: '2層 201室', mapUrl: 'https://maps.app.goo.gl/M6Lp5kZk5C5C5C5C5' },
-            { id: 20, date: '2026-04-20', category: '住宿', time: '11:00', name: 'Airbnb 延南洞 (Check-out)', mapUrl: 'https://maps.app.goo.gl/M6Lp5kZk5C5C5C5C5' },
-            { id: 21, date: '2026-04-20', category: '航班', time: '18:00', name: '回程航班 ✈️', note: '仁川機場', mapUrl: 'https://maps.app.goo.gl/9uG5CqZqB7E1tZ8S9' }
+        // 已加入你提供的航班與飯店資訊
+        const defaultData = [
+            { id: 1, date: '2026-04-11', category: '航班', time: '01:25', name: '去程：HKG ➔ ICN (T2)', note: '06:25 抵達。凌晨航班請提前於 4/10 晚間到機場。' },
+            { id: 2, date: '2026-04-11', category: '住宿', time: '15:00', name: 'GLAD Yeouido (入住)', note: '汝矣島格萊德飯店' },
+            { id: 3, date: '2026-04-13', category: '住宿', time: '11:00', name: 'GLAD Yeouido (退房)' },
+            { id: 4, date: '2026-04-13', category: '住宿', time: '14:00', name: 'Seoul Vamos Hotel (入住)', note: '서울 바모斯 호텔。現場需支付 20,000 韓元現金。' },
+            { id: 5, date: '2026-04-16', category: '住宿', time: '11:00', name: 'Seoul Vamos Hotel (退房)' },
+            { id: 6, date: '2026-04-16', category: '住宿', time: '15:00', name: 'Airbnb 延南洞 (入住)', note: '서울시 마포구 연남로1길 14-9 (201號)' },
+            { id: 7, date: '2026-04-20', category: '住宿', time: '11:00', name: 'Airbnb 延南洞 (退房)' },
+            { id: 8, date: '2026-04-20', category: '航班', time: '21:30', name: '回程：ICN (T2) ➔ HKG', note: '仁川機場第二航廈' }
         ];
 
-        const itineraryData = ref(JSON.parse(localStorage.getItem('seoul_trip_2026')) || defaultItinerary);
-
-        watch(itineraryData, (newVal) => {
-            localStorage.setItem('seoul_trip_2026', JSON.stringify(newVal));
-        }, { deep: true });
-
-        const currentWeather = computed(() => {
-            const data = { 
-                '2026-04-11': { low: 7, high: 16, icon: 'sun', desc: 'Sunny' }, 
-                '2026-04-13': { low: 9, high: 14, icon: 'cloud-rain', desc: 'Rainy' },
-                '2026-04-16': { low: 1, high: 7, icon: 'snowflake', desc: 'Cold' } 
-            };
-            return data[selectedDate.value] || { low: 8, high: 15, icon: 'cloud', desc: 'Cloudy' };
-        });
-
-        const selectedDateDisplay = computed(() => {
-            const d = new Date(selectedDate.value);
-            return `${d.getMonth()+1}/${d.getDate()}`;
-        });
+        const itineraryData = ref(JSON.parse(localStorage.getItem('seoul_trip_final')) || defaultData);
+        watch(itineraryData, (newVal) => localStorage.setItem('seoul_trip_final', JSON.stringify(newVal)), { deep: true });
 
         const currentDayItinerary = computed(() => {
             return itineraryData.value.filter(i => i.date === selectedDate.value).sort((a,b) => a.time.localeCompare(b.time));
         });
 
         const getCategoryIcon = (cat) => {
-            const map = { '美食': 'utensils', '景點': 'camera', '住宿': 'home', '航班': 'plane', '購物': 'shopping-bag' };
+            const map = { '美食': 'utensils', '景點': 'camera', '住宿': 'home', '航班': 'plane' };
             return map[cat] || 'map-pin';
         };
 
-        const openAddModal = () => {
-            isEditing.value = false;
-            itForm.value = { id: Date.now(), name: '', time: '09:00', category: '景點', mapUrl: '', note: '' };
-            showModal.value = true;
-        };
-
-        const openEditModal = (item) => {
-            isEditing.value = true;
-            itForm.value = { ...item };
-            showModal.value = true;
-        };
-
+        const openAddModal = () => { isEditing.value = false; itForm.value = { id: Date.now(), name: '', time: '12:00', category: '景點', note: '' }; showModal.value = true; };
+        const openEditModal = (item) => { isEditing.value = true; itForm.value = { ...item }; showModal.value = true; };
+        
         const saveItem = () => {
             if(!itForm.value.name) return;
             if(isEditing.value) {
@@ -267,7 +185,7 @@ createApp({
         onMounted(() => lucide.createIcons());
         watch([currentTab, selectedDate, showModal], () => setTimeout(() => lucide.createIcons(), 10));
 
-        return { currentTab, tabs, days, selectedDate, krw, currentWeather, selectedDateDisplay, currentDayItinerary, itForm, showModal, isEditing, openAddModal, openEditModal, saveItem, deleteItem, getCategoryIcon };
+        return { currentTab, tabs, days, selectedDate, krw, currentDayItinerary, itForm, showModal, isEditing, openAddModal, openEditModal, saveItem, deleteItem, getCategoryIcon };
     }
 }).mount('#app');
 </script>
