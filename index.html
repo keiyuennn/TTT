@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Seoul 2026 | Trip Planner</title>
+    <title>Seoul Trip 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,101 +20,163 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFCFE; -webkit-font-smoothing: antialiased; }
-        .glass-nav { background: rgba(253, 252, 254, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-        .minimal-card { background: white; border-radius: 28px; border: 1px solid #F3E8FF; box-shadow: 0 4px 15px -3px rgba(168, 85, 247, 0.05); }
-        .date-item.active { background-color: #A855F7; color: white; box-shadow: 0 8px 20px -5px rgba(168, 85, 247, 0.3); }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FFFFFF; -webkit-font-smoothing: antialiased; }
+        .banner { 
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/BTS_for_Dispatch_White_Day_Special%2C_27_February_2019_01.jpg/1200px-BTS_for_Dispatch_White_Day_Special%2C_27_February_2019_01.jpg'); 
+            background-size: cover; background-position: center; height: 380px;
+        }
+        .glass-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border-radius: 40px 40px 0 0; margin-top: -40px; }
+        .minimal-card { background: white; border-radius: 32px; border: 1px solid #F3E8FF; }
+        .date-item.active { background-color: #A855F7; color: white; border-color: #A855F7; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .tab-active { color: #A855F7; background: #F3E8FF; }
     </style>
 </head>
 <body>
 
 <div id="app" class="max-w-md mx-auto min-h-screen relative pb-28">
     
-    <header class="p-8 pt-12">
-        <h1 class="text-5xl font-black text-slate-800 tracking-tighter">Seoul</h1>
-        <p class="text-jp-purple-500 font-bold uppercase tracking-widest text-xs mt-1">2026.04.11 — 04.20</p>
-    </header>
+    <div class="banner relative">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        <div class="absolute bottom-12 right-8 text-right text-white">
+            <h1 class="text-7xl font-black tracking-tighter">Seoul</h1>
+            <p class="text-sm font-bold opacity-80 uppercase tracking-widest">Apr 11 - Apr 20</p>
+        </div>
+    </div>
 
-    <nav class="sticky top-0 z-50 px-6 py-4 glass-nav flex justify-between items-center rounded-t-[40px]">
+    <div class="glass-header relative z-10 px-8 py-6 flex justify-between items-center">
+        <h2 class="text-xl font-black text-slate-800">首爾特別市</h2>
         <div class="flex gap-1 bg-jp-purple-100 p-1 rounded-2xl">
-            <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id"
-                :class="['px-6 py-2 rounded-xl transition-all font-bold text-sm', currentTab === tab.id ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
-                {{ tab.name }}
+            <button @click="currentTab = 'itinerary'" :class="['p-3 rounded-xl transition-all', currentTab === 'itinerary' ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
+                <i data-lucide="map" class="w-5 h-5"></i>
+            </button>
+            <button @click="currentTab = 'shop'" :class="['p-3 rounded-xl transition-all', currentTab === 'shop' ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
+                <i data-lucide="shopping-basket" class="w-5 h-5"></i>
+            </button>
+            <button @click="currentTab = 'info'" :class="['p-3 rounded-xl transition-all', currentTab === 'info' ? 'bg-white text-jp-purple-500 shadow-sm' : 'text-slate-400']">
+                <i data-lucide="info" class="w-5 h-5"></i>
             </button>
         </div>
-    </nav>
+    </div>
 
-    <main class="px-5 mt-6">
+    <main class="px-6 pt-4">
         
-        <div v-if="currentTab === 'itinerary'" class="space-y-6">
+        <div v-if="currentTab === 'itinerary'" class="space-y-8 animate-slide-up">
+            <div class="minimal-card p-6 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-5">
+                    <div class="w-16 h-16 bg-jp-purple-100 rounded-3xl flex items-center justify-center text-jp-purple-500">
+                        <i :data-lucide="currentWeather.icon" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">{{ selectedDateDisplay }} · SEOUL</p>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-4xl font-black text-slate-800">{{ currentWeather.low }}°</span>
+                            <span class="text-sm font-bold text-slate-300">/ {{ currentWeather.high }}°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="bg-jp-purple-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase mb-1">{{ currentWeather.desc }}</div>
+                    <p class="text-[10px] font-bold text-slate-300 uppercase">體感 {{ currentWeather.feel }}°</p>
+                </div>
+            </div>
+
             <div class="flex gap-3 overflow-x-auto no-scrollbar py-2">
                 <button v-for="day in days" :key="day.date" @click="selectedDate = day.date"
-                    :class="['flex-shrink-0 w-12 h-16 rounded-2xl flex flex-col items-center justify-center transition-all border border-slate-100', selectedDate === day.date ? 'date-item active' : 'bg-white text-slate-400']">
-                    <span class="text-[10px] font-bold uppercase">{{ day.weekday }}</span>
-                    <span class="text-lg font-black">{{ day.dayNum }}</span>
+                    :class="['flex-shrink-0 w-14 h-16 rounded-2xl flex flex-col items-center justify-center transition-all border border-slate-50', selectedDate === day.date ? 'date-item active' : 'bg-white text-slate-300']">
+                    <span class="text-[9px] font-black uppercase">{{ day.weekday }}</span>
+                    <span class="text-xl font-black">{{ day.dayNum }}</span>
                 </button>
             </div>
 
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div v-for="item in currentDayItinerary" :key="item.id" @click="openEditModal(item)"
                     class="minimal-card p-5 flex items-center gap-4">
-                    <div class="w-11 h-11 rounded-2xl bg-jp-purple-50 flex items-center justify-center text-jp-purple-500">
-                        <i :data-lucide="getCategoryIcon(item.category)" class="w-5 h-5"></i>
+                    <div class="w-12 h-12 rounded-2xl bg-jp-purple-50 flex items-center justify-center text-jp-purple-500">
+                        <i :data-lucide="getCategoryIcon(item.category)" class="w-6 h-6"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="text-[10px] font-bold text-jp-purple-400 uppercase tracking-tighter">{{ item.time }}</p>
-                        <h4 class="text-md font-bold text-slate-800">{{ item.name }}</h4>
-                        <p v-if="item.note" class="text-[11px] text-slate-400 mt-0.5">{{ item.note }}</p>
+                        <p class="text-[10px] font-black text-jp-purple-400 uppercase">{{ item.time }}</p>
+                        <h4 class="text-lg font-bold text-slate-800 leading-tight">{{ item.name }}</h4>
+                        <p v-if="item.note" class="text-xs text-slate-400 mt-1">{{ item.note }}</p>
                     </div>
-                    <i v-if="item.note" data-lucide="chevron-right" class="w-4 h-4 text-slate-200"></i>
                 </div>
             </div>
         </div>
 
-        <div v-if="currentTab === 'tools'" class="space-y-6">
-            <div class="minimal-card p-7 bg-jp-purple-600 text-white shadow-xl border-none">
-                <h4 class="text-xs font-black opacity-80 uppercase mb-4">KRW ➔ TWD</h4>
-                <input type="number" v-model="krw" class="w-full bg-white/20 rounded-2xl px-5 py-4 font-black text-2xl border-none text-white placeholder-white/40 focus:ring-0" placeholder="₩ 0">
-                <div class="mt-4 flex justify-between items-baseline px-1">
-                    <span class="text-4xl font-black">NT$ {{ (krw * 0.024).toFixed(0) }}</span>
-                    <span class="text-xs font-bold opacity-60">台幣換算</span>
+        <div v-if="currentTab === 'shop'" class="space-y-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-2xl font-black text-slate-800">Shopping List</h3>
+                <button @click="addShopItem" class="text-jp-purple-500 font-bold text-sm">+ 新增項目</button>
+            </div>
+            <div class="space-y-3">
+                <div v-for="(item, idx) in shopList" :key="idx" class="minimal-card p-4 flex items-center gap-4">
+                    <input type="checkbox" v-model="item.done" class="w-6 h-6 rounded-full border-2 border-jp-purple-200 text-jp-purple-500 focus:ring-0">
+                    <input v-model="item.text" class="flex-1 bg-transparent border-none font-bold text-slate-700 focus:ring-0" :class="{'line-through opacity-40': item.done}">
+                    <button @click="shopList.splice(idx, 1)" class="text-slate-200 hover:text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
             </div>
-            
-            <div class="grid grid-cols-2 gap-3">
-                <a href="tel:112" class="minimal-card p-4 text-center border-red-50">
-                    <span class="text-[10px] font-black text-slate-400 block mb-1">警察局</span>
-                    <span class="text-xl font-black text-red-500">112</span>
-                </a>
-                <a href="tel:119" class="minimal-card p-4 text-center border-red-50">
-                    <span class="text-[10px] font-black text-slate-400 block mb-1">急救/火警</span>
-                    <span class="text-xl font-black text-red-500">119</span>
-                </a>
+        </div>
+
+        <div v-if="currentTab === 'info'" class="space-y-8 animate-slide-up">
+            <div class="minimal-card p-8 bg-jp-purple-600 text-white border-none shadow-xl">
+                <h4 class="text-xs font-black opacity-70 uppercase mb-4">Currency: KRW ➔ TWD</h4>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-xs opacity-60">₩</span>
+                    <input type="number" v-model="krw" class="bg-transparent border-none text-4xl font-black focus:ring-0 p-0 w-full placeholder-white/30" placeholder="0">
+                </div>
+                <div class="mt-6 pt-6 border-t border-white/10 flex justify-between items-center">
+                    <span class="text-3xl font-black">NT$ {{ (krw * 0.024).toFixed(0) }}</span>
+                    <i data-lucide="refresh-cw" class="w-5 h-5 opacity-40"></i>
+                </div>
             </div>
+
+            <section class="space-y-4">
+                <h4 class="text-[11px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4"></i> 緊急求助電話 (SEOUL)
+                </h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="tel:112" class="minimal-card p-5 text-center">
+                        <span class="text-xs font-bold text-slate-300 block mb-1">警察局</span>
+                        <span class="text-2xl font-black text-red-500">112</span>
+                    </a>
+                    <a href="tel:119" class="minimal-card p-5 text-center">
+                        <span class="text-xs font-bold text-slate-300 block mb-1">火警/救護車</span>
+                        <span class="text-2xl font-black text-red-500">119</span>
+                    </a>
+                    <a href="tel:1330" class="minimal-card p-5 text-center">
+                        <span class="text-xs font-bold text-slate-300 block mb-1">觀光翻譯</span>
+                        <span class="text-2xl font-black text-jp-purple-500">1330</span>
+                    </a>
+                    <a href="tel:1339" class="minimal-card p-5 text-center">
+                        <span class="text-xs font-bold text-slate-300 block mb-1">醫療救援</span>
+                        <span class="text-2xl font-black text-jp-purple-500">1339</span>
+                    </a>
+                </div>
+            </section>
         </div>
     </main>
 
-    <button @click="openAddModal" class="fixed bottom-10 right-8 w-16 h-16 bg-jp-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 active:scale-95 transition-transform">
+    <button @click="openAddModal" class="fixed bottom-10 right-8 w-16 h-16 bg-jp-purple-500 text-white rounded-full shadow-2xl flex items-center justify-center z-50 active:scale-90 transition-all">
         <i data-lucide="plus" class="w-8 h-8"></i>
     </button>
 
-    <div v-if="showModal" class="fixed inset-0 bg-slate-900/60 z-[100] flex items-end backdrop-blur-sm">
-        <div class="w-full bg-white rounded-t-[40px] p-8 pb-10 shadow-2xl animate-slide-up">
-            <h3 class="text-xl font-bold mb-6 text-slate-800">{{ isEditing ? '修改計畫' : '新增計畫' }}</h3>
+    <div v-if="showModal" class="fixed inset-0 bg-black/60 z-[100] flex items-end backdrop-blur-sm">
+        <div class="w-full bg-white rounded-t-[40px] p-8 pb-12 animate-slide-up">
+            <h3 class="text-xl font-black mb-6">{{ isEditing ? '修改行程' : '新增計畫' }}</h3>
             <div class="space-y-4">
-                <input v-model="itForm.name" placeholder="名稱" class="w-full p-4 bg-slate-50 rounded-2xl border-none font-bold">
+                <input v-model="itForm.name" placeholder="目的地或活動名稱" class="w-full p-4 bg-slate-50 rounded-2xl border-none font-bold focus:ring-2 focus:ring-jp-purple-200">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="time" v-model="itForm.time" class="p-4 bg-slate-50 rounded-2xl border-none font-bold text-jp-purple-600">
+                    <input type="time" v-model="itForm.time" class="p-4 bg-slate-50 rounded-2xl border-none font-bold">
                     <select v-model="itForm.category" class="p-4 bg-slate-50 rounded-2xl border-none font-bold text-jp-purple-500">
                         <option>景點</option><option>美食</option><option>住宿</option><option>航班</option>
                     </select>
                 </div>
-                <textarea v-model="itForm.note" placeholder="備註或地址..." class="w-full p-4 bg-slate-50 rounded-2xl border-none text-sm h-24 resize-none"></textarea>
-                <div class="flex gap-3 pt-2">
-                    <button v-if="isEditing" @click="deleteItem" class="flex-1 py-4 font-bold text-red-400">刪除</button>
+                <textarea v-model="itForm.note" placeholder="備註地址或細節..." class="w-full p-4 bg-slate-50 rounded-2xl border-none text-sm h-24 resize-none"></textarea>
+                <div class="flex gap-4 pt-4">
+                    <button v-if="isEditing" @click="deleteItem" class="flex-1 py-4 font-bold text-red-400 bg-red-50 rounded-2xl">刪除</button>
                     <button @click="showModal = false" class="flex-1 py-4 font-bold text-slate-400">取消</button>
-                    <button @click="saveItem" class="flex-[2] py-4 bg-jp-purple-600 text-white rounded-2xl font-bold">儲存</button>
+                    <button @click="saveItem" class="flex-[2] py-4 bg-jp-purple-500 text-white rounded-2xl font-bold shadow-lg">儲存</button>
                 </div>
             </div>
         </div>
@@ -133,26 +195,37 @@ createApp({
         const isEditing = ref(false);
         const itForm = ref({ id: null, name: '', time: '09:00', category: '景點', note: '' });
 
-        const tabs = [ { id: 'itinerary', name: '行程' }, { id: 'tools', name: '工具箱' } ];
         const days = Array.from({length: 10}, (_, i) => {
-            const date = new Date(2026, 3, 11 + i);
-            return { weekday: date.toLocaleDateString('en-US', {weekday: 'short'}), dayNum: 11 + i, date: `2026-04-${11 + i}` };
+            const d = new Date(2026, 3, 11 + i);
+            return { weekday: d.toLocaleDateString('en-US', {weekday: 'short'}), dayNum: 11 + i, date: `2026-04-${11 + i}` };
         });
 
-        // 已加入你提供的航班與飯店資訊
-        const defaultData = [
-            { id: 1, date: '2026-04-11', category: '航班', time: '01:25', name: '去程：HKG ➔ ICN (T2)', note: '06:25 抵達。凌晨航班請提前於 4/10 晚間到機場。' },
-            { id: 2, date: '2026-04-11', category: '住宿', time: '15:00', name: 'GLAD Yeouido (入住)', note: '汝矣島格萊德飯店' },
-            { id: 3, date: '2026-04-13', category: '住宿', time: '11:00', name: 'GLAD Yeouido (退房)' },
-            { id: 4, date: '2026-04-13', category: '住宿', time: '14:00', name: 'Seoul Vamos Hotel (入住)', note: '서울 바모斯 호텔。現場需支付 20,000 韓元現金。' },
-            { id: 5, date: '2026-04-16', category: '住宿', time: '11:00', name: 'Seoul Vamos Hotel (退房)' },
-            { id: 6, date: '2026-04-16', category: '住宿', time: '15:00', name: 'Airbnb 延南洞 (入住)', note: '서울시 마포구 연남로1길 14-9 (201號)' },
-            { id: 7, date: '2026-04-20', category: '住宿', time: '11:00', name: 'Airbnb 延南洞 (退房)' },
-            { id: 8, date: '2026-04-20', category: '航班', time: '21:30', name: '回程：ICN (T2) ➔ HKG', note: '仁川機場第二航廈' }
+        const defaultItinerary = [
+            { id: 1, date: '2026-04-11', category: '航班', time: '01:25', name: '去程：HKG ➔ ICN (T2)', note: '凌晨起飛，請提早抵達機場' },
+            { id: 2, date: '2026-04-11', category: '住宿', time: '15:00', name: 'GLAD Yeouido (入住)' },
+            { id: 3, date: '2026-04-13', category: '住宿', time: '14:00', name: 'Seoul Vamos Hotel (入住)', note: '現場需付 20,000 韓元現金' },
+            { id: 4, date: '2026-04-16', category: '住宿', time: '15:00', name: 'Airbnb 延南洞 (入住)', note: '마포구 연남로1길 14-9 (201號)' },
+            { id: 5, date: '2026-04-20', category: '航班', time: '21:30', name: '回程：ICN (T2) ➔ HKG' }
         ];
 
-        const itineraryData = ref(JSON.parse(localStorage.getItem('seoul_trip_final')) || defaultData);
-        watch(itineraryData, (newVal) => localStorage.setItem('seoul_trip_final', JSON.stringify(newVal)), { deep: true });
+        const itineraryData = ref(JSON.parse(localStorage.getItem('seoul_v4_data')) || defaultItinerary);
+        const shopList = ref(JSON.parse(localStorage.getItem('seoul_v4_shop')) || [{text: 'Olive Young 護膚品', done: false}]);
+
+        watch(itineraryData, (val) => localStorage.setItem('seoul_v4_data', JSON.stringify(val)), {deep: true});
+        watch(shopList, (val) => localStorage.setItem('seoul_v4_shop', JSON.stringify(val)), {deep: true});
+
+        const currentWeather = computed(() => {
+            const data = {
+                '2026-04-11': { low: 7, high: 16, icon: 'sun', desc: 'Sunny', feel: 14 },
+                '2026-04-20': { low: 7, high: 16, icon: 'sun', desc: 'Sunny', feel: 15 }
+            };
+            return data[selectedDate.value] || { low: 8, high: 15, icon: 'cloud', desc: 'Cloudy', feel: 12 };
+        });
+
+        const selectedDateDisplay = computed(() => {
+            const d = new Date(selectedDate.value);
+            return `${d.getMonth()+1}/${d.getDate()}`;
+        });
 
         const currentDayItinerary = computed(() => {
             return itineraryData.value.filter(i => i.date === selectedDate.value).sort((a,b) => a.time.localeCompare(b.time));
@@ -165,9 +238,7 @@ createApp({
 
         const openAddModal = () => { isEditing.value = false; itForm.value = { id: Date.now(), name: '', time: '12:00', category: '景點', note: '' }; showModal.value = true; };
         const openEditModal = (item) => { isEditing.value = true; itForm.value = { ...item }; showModal.value = true; };
-        
         const saveItem = () => {
-            if(!itForm.value.name) return;
             if(isEditing.value) {
                 const idx = itineraryData.value.findIndex(i => i.id === itForm.value.id);
                 itineraryData.value[idx] = { ...itForm.value };
@@ -176,16 +247,13 @@ createApp({
             }
             showModal.value = false;
         };
-
-        const deleteItem = () => {
-            itineraryData.value = itineraryData.value.filter(i => i.id !== itForm.value.id);
-            showModal.value = false;
-        };
+        const deleteItem = () => { itineraryData.value = itineraryData.value.filter(i => i.id !== itForm.value.id); showModal.value = false; };
+        const addShopItem = () => shopList.value.push({text: '新項目', done: false});
 
         onMounted(() => lucide.createIcons());
         watch([currentTab, selectedDate, showModal], () => setTimeout(() => lucide.createIcons(), 10));
 
-        return { currentTab, tabs, days, selectedDate, krw, currentDayItinerary, itForm, showModal, isEditing, openAddModal, openEditModal, saveItem, deleteItem, getCategoryIcon };
+        return { currentTab, days, selectedDate, krw, shopList, currentWeather, selectedDateDisplay, currentDayItinerary, itForm, showModal, isEditing, openAddModal, openEditModal, saveItem, deleteItem, getCategoryIcon, addShopItem };
     }
 }).mount('#app');
 </script>
