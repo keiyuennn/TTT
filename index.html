@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NomadFlow Pro | 日系極簡版</title>
+    <title>Seoul | NomadFlow Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -26,7 +26,7 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=SF+Pro+Display:wght@400;700;900&display=swap');
         body { 
             font-family: 'SF Pro Display', 'Noto Sans TC', sans-serif; 
             background-color: #FDFCFE;
@@ -50,9 +50,7 @@
             box-shadow: 0 4px 15px -3px rgba(168, 85, 247, 0.04);
             transition: all 0.3s ease;
         }
-        .minimal-card:active {
-            transform: scale(0.97);
-        }
+        .minimal-card:active { transform: scale(0.97); }
         .date-item.active {
             background-color: #A855F7;
             color: white;
@@ -64,19 +62,19 @@
         .checked-item { opacity: 0.5; text-decoration: line-through; }
     </style>
 </head>
-<body class="text-slate-900">
+<body class="text-slate-900 leading-relaxed">
 
 <div id="app" class="max-w-md mx-auto min-h-screen relative pb-28 overflow-x-hidden">
     
     <header class="banner relative w-full h-80 z-10">
-        <div class="absolute inset-0 bg-gradient-to-l from-white/30 to-transparent"></div>
-        <div class="absolute inset-0 flex flex-col justify-end items-end p-8 text-right">
-            <h1 class="text-3xl font-black text-jp-purple-600 drop-shadow-sm">Seoul 旅記</h1>
-            <p class="text-xs text-jp-purple-500 font-bold uppercase tracking-widest mt-1 mb-5">Apr 11 - Apr 20</p>
+        <div class="absolute inset-0 bg-gradient-to-l from-black/30 to-transparent"></div>
+        <div class="absolute inset-0 flex flex-col justify-end items-end p-8 text-right z-20">
+            <h1 class="text-6xl font-black text-white drop-shadow-lg tracking-tight">Seoul</h1>
+            <p class="text-sm text-white/80 font-bold uppercase tracking-widest mt-1 mb-5 drop-shadow-md">Apr 11 - Apr 20</p>
         </div>
     </header>
 
-    <nav class="sticky top-0 z-50 px-6 py-4 glass-nav flex justify-between items-center -mt-8 rounded-t-[40px]">
+    <nav class="sticky top-0 z-50 px-6 py-4 glass-nav flex justify-between items-center -mt-8 rounded-t-[40px] shadow-sm">
         <h2 class="text-lg font-bold text-slate-800">首爾特別市</h2>
         <div class="flex gap-1 bg-jp-purple-100 p-1 rounded-xl shadow-inner">
             <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id"
@@ -89,7 +87,7 @@
     <main class="px-5 pt-8 z-20 relative">
         
         <div v-if="currentTab === 'itinerary'" class="animate-slide-up space-y-8 pb-10">
-            <section class="minimal-card p-6 flex items-center justify-between">
+            <section class="minimal-card p-6 flex items-center justify-between border-slate-100">
                 <div class="flex items-center gap-5">
                     <div class="p-3 bg-jp-purple-100 rounded-3xl shadow-inner text-jp-purple-500">
                         <i :data-lucide="currentWeather.icon" class="w-9 h-9"></i>
@@ -97,8 +95,8 @@
                     <div>
                         <p class="text-[11px] font-black text-jp-purple-400 uppercase tracking-widest mb-1">{{ selectedDateDisplay }} · Seoul</p>
                         <div class="flex items-baseline gap-2.5">
-                            <span class="text-3xl font-black text-slate-800">{{ currentWeather.high }}°</span>
-                            <span class="text-base font-bold text-slate-300">/ {{ currentWeather.low }}°C</span>
+                            <span class="text-3xl font-black text-slate-800">{{ currentWeather.low }}°</span>
+                            <span class="text-base font-bold text-slate-300">/ {{ currentWeather.high }}°C</span>
                         </div>
                     </div>
                 </div>
@@ -139,76 +137,106 @@
             <h3 class="text-xl font-bold px-1 text-jp-purple-600">購物清單</h3>
             <div class="grid grid-cols-2 gap-5">
                 <div v-for="item in checklist" :key="item.id" @click="item.done = !item.done"
-                    class="minimal-card p-3 relative group overflow-hidden">
-                    <div class="aspect-square rounded-3xl bg-slate-100 mb-3 overflow-hidden flex items-center justify-center">
+                    class="minimal-card p-3 relative group overflow-hidden border border-slate-100">
+                    <div class="aspect-square rounded-3xl bg-slate-100 mb-3 overflow-hidden flex items-center justify-center shadow-inner">
                         <img v-if="item.image" :src="item.image" class="w-full h-full object-cover">
-                        <i v-else data-lucide="shopping-basket" class="text-slate-200 w-10 h-10"></i>
+                        <i v-else data-lucide="shopping-basket" class="text-slate-300 w-10 h-10 opacity-70"></i>
                     </div>
                     <p :class="['text-sm font-black text-slate-700 text-center', item.done ? 'checked-item' : '']">{{ item.name }}</p>
-                    <button @click.stop="deleteChecklistItem(item.id)" class="absolute top-2 right-2 w-7 h-7 bg-white/90 text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <button @click.stop="deleteChecklistItem(item.id)" class="absolute top-2 right-2 w-7 h-7 bg-white/90 text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 z-20">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
-                    <div v-if="item.done" class="absolute inset-0 bg-jp-purple-500/10 flex items-center justify-center rounded-[32px] pointer-events-none">
-                        <i data-lucide="check-circle-2" class="text-jp-purple-500 w-8 h-8"></i>
+                    <div v-if="item.done" class="absolute inset-0 bg-jp-purple-500/10 flex items-center justify-center rounded-[32px] pointer-events-none z-10">
+                        <i data-lucide="check" class="text-jp-purple-500 w-8 h-8"></i>
                     </div>
                 </div>
             </div>
         </div>
 
         <div v-if="currentTab === 'info'" class="space-y-6 animate-slide-up pb-20">
-            <div class="minimal-card p-7 bg-gradient-to-br from-jp-purple-500 to-jp-purple-600 text-white">
-                <h4 class="text-xs font-black opacity-80 uppercase mb-4">KRW ➔ HKD</h4>
-                <input type="number" v-model="krw" class="w-full bg-white/20 rounded-xl px-4 py-3 text-2xl font-black text-white border-none placeholder-white/50" placeholder="₩ 0">
-                <div class="w-full bg-white mt-3 rounded-xl px-4 py-4 font-black text-2xl text-jp-purple-600 flex justify-between">
-                    <span>{{ (krw * 0.0056).toFixed(1) }}</span><span class="text-sm">HKD</span>
+            
+            <section class="minimal-card p-6 border-red-100 bg-red-50/30">
+                <h4 class="text-[11px] font-black text-red-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4"></i> 緊急求助電話 (Seoul)
+                </h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="tel:112" class="flex flex-col items-center justify-center p-3 bg-white border border-red-100 rounded-2xl shadow-sm active:scale-95 transition-transform">
+                        <span class="text-xs font-bold text-slate-400">警察局</span>
+                        <span class="text-xl font-black text-red-600">112</span>
+                    </a>
+                    <a href="tel:119" class="flex flex-col items-center justify-center p-3 bg-white border border-red-100 rounded-2xl shadow-sm active:scale-95 transition-transform">
+                        <span class="text-xs font-bold text-slate-400">火警/救護車</span>
+                        <span class="text-xl font-black text-red-600">119</span>
+                    </a>
+                    <a href="tel:1330" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-100 rounded-2xl shadow-sm active:scale-95 transition-transform">
+                        <span class="text-[10px] font-bold text-slate-400 text-center leading-tight">觀光翻譯/諮詢</span>
+                        <span class="text-xl font-black text-jp-purple-500">1330</span>
+                    </a>
+                    <a href="tel:1339" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-100 rounded-2xl shadow-sm active:scale-95 transition-transform">
+                        <span class="text-xs font-bold text-slate-400">醫療救援</span>
+                        <span class="text-xl font-black text-jp-purple-500">1339</span>
+                    </a>
+                </div>
+            </section>
+
+            <div class="minimal-card p-7 bg-gradient-to-br from-jp-purple-500 to-jp-purple-600 border-none text-white shadow-xl">
+                <h4 class="text-xs font-black opacity-80 uppercase tracking-widest mb-4 flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> KRW ➔ HKD</h4>
+                <input type="number" v-model="krw" class="w-full bg-white/20 rounded-xl px-5 py-4 font-black text-2xl border-none text-white placeholder-white/50" placeholder="₩ 0">
+                <div class="w-full bg-white border border-jp-purple-200 rounded-2xl px-5 py-5 font-black text-2xl text-jp-purple-600 flex justify-between items-center shadow-inner mt-4">
+                    <span>{{ (krw * 0.0056).toFixed(1) }}</span>
+                    <span class="text-jp-purple-300 text-sm font-bold tracking-widest">HKD</span>
                 </div>
             </div>
+
             <div class="minimal-card divide-y divide-jp-purple-50">
                 <div v-for="info in infoItems" :key="info.id" class="p-5 flex justify-between items-center">
-                    <div><p class="text-[10px] font-bold text-jp-purple-600 uppercase">{{ info.type }}</p><p class="font-bold">{{ info.title }}</p></div>
-                    <button @click="deleteInfo(info.id)" class="text-red-300 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    <div>
+                        <p class="text-[10px] font-bold text-jp-purple-600 uppercase mb-0.5">{{ info.type }}</p>
+                        <p class="font-bold text-slate-800">{{ info.title }}</p>
+                        <p v-if="info.content" class="text-xs text-slate-400 mt-1">{{ info.content }}</p>
+                    </div>
+                    <button @click="deleteInfo(info.id)" class="text-red-300 hover:text-red-500 transition-colors p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                 </div>
             </div>
         </div>
     </main>
 
-    <button @click="handleMainAction" class="fixed bottom-10 right-8 w-16 h-16 bg-jp-purple-500 text-white rounded-full shadow-2xl flex items-center justify-center z-[100] active:scale-90 transition-transform">
+    <button @click="handleMainAction" class="fixed bottom-10 right-8 w-16 h-16 bg-jp-purple-500 text-white rounded-full shadow-2xl flex items-center justify-center z-[100] active:scale-90 transition-all">
         <i data-lucide="plus" class="w-8 h-8"></i>
     </button>
 
     <div v-if="showModal" class="fixed inset-0 bg-black/60 z-[200] flex items-end backdrop-blur-sm">
-        <div class="w-full bg-jp-purple-50 rounded-t-[40px] p-9 pb-12 animate-slide-up max-h-[90vh] overflow-y-auto">
-            <div class="w-14 h-1.5 bg-jp-purple-100 rounded-full mx-auto mb-7"></div>
+        <div class="w-full bg-jp-purple-50 rounded-t-[40px] p-9 pb-12 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto no-scrollbar">
+            <div class="w-14 h-1.5 bg-jp-purple-100 rounded-full mx-auto mb-7 shadow-inner"></div>
             
             <div v-if="modalType === 'itinerary'" class="space-y-4">
-                <h3 class="text-xl font-bold mb-5">{{ isEditing ? '編輯行程' : '新增計畫' }}</h3>
-                <input v-model="itForm.name" placeholder="景點名稱" class="w-full p-5 bg-white minimal-card border-none text-lg font-black">
+                <h3 class="text-xl font-bold mb-5 text-slate-800">{{ isEditing ? '編輯行程' : '新增計畫' }}</h3>
+                <input v-model="itForm.name" placeholder="目的地名稱" class="w-full p-5 bg-white minimal-card border-none text-lg font-black text-slate-800 shadow-inner">
                 <div class="grid grid-cols-2 gap-4">
                     <input type="time" v-model="itForm.time" class="p-4 bg-white minimal-card border-none font-bold">
                     <select v-model="itForm.category" class="p-4 bg-white minimal-card border-none font-bold text-jp-purple-500">
-                        <option>美食</option><option>景點</option><option>住宿</option><option>航班</option><option>購物</option>
+                        <option>景點</option><option>美食</option><option>住宿</option><option>航班</option><option>購物</option>
                     </select>
                 </div>
-                <input v-model="itForm.mapUrl" placeholder="Google Maps 網址" class="w-full p-4 bg-white minimal-card border-none text-sm">
-                <textarea v-model="itForm.note" placeholder="行程備註 (例如: 必買排隊、入口在那邊...)" class="w-full p-4 bg-white minimal-card border-none text-sm h-24 resize-none"></textarea>
-                
-                <div class="flex gap-4 pt-4">
+                <input v-model="itForm.mapUrl" placeholder="Google Maps 分享網址 (選填)" class="w-full p-4 bg-white minimal-card border-none text-sm">
+                <textarea v-model="itForm.note" placeholder="備註內容..." class="w-full p-4 bg-white minimal-card border-none text-sm h-24 resize-none leading-relaxed"></textarea>
+                <div class="flex gap-4 pt-6">
                     <button @click="showModal = false" class="flex-1 py-4 font-bold text-jp-purple-400">取消</button>
-                    <button @click="saveItinerary" class="flex-[2] py-4 bg-jp-purple-500 text-white rounded-2xl font-bold shadow-lg">儲存</button>
+                    <button @click="saveItinerary" class="flex-[2] py-4 bg-jp-purple-500 text-white rounded-2xl font-bold w-full shadow-lg">儲存</button>
                 </div>
             </div>
 
             <div v-if="modalType === 'checklist'" class="space-y-4 text-center">
-                <h3 class="text-xl font-bold mb-5">新增購物清單</h3>
-                <div @click="triggerFileInput" class="w-full h-48 minimal-card flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-jp-purple-100">
+                <h3 class="text-xl font-bold mb-5 text-slate-800">新增購物項目</h3>
+                <div @click="triggerFileInput" class="w-full h-48 minimal-card flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-jp-purple-100 overflow-hidden cursor-pointer">
                     <img v-if="newChecklistItem.image" :src="newChecklistItem.image" class="absolute inset-0 w-full h-full object-cover">
                     <div v-else class="text-jp-purple-300"><i data-lucide="camera" class="w-10 h-10 mx-auto"></i><p class="text-xs font-bold mt-2">加入圖片</p></div>
                     <input type="file" id="fileInput" class="hidden" accept="image/*" @change="handleFileUpload">
                 </div>
-                <input v-model="newChecklistItem.name" placeholder="商品名稱" class="w-full p-5 bg-white minimal-card border-none text-lg font-black">
-                <div class="flex gap-4 pt-4">
+                <input v-model="newChecklistItem.name" placeholder="商品名稱" class="w-full p-5 bg-white minimal-card border-none text-lg font-black text-slate-800 shadow-inner">
+                <div class="flex gap-4 pt-6">
                     <button @click="showModal = false" class="flex-1 py-4 font-bold text-jp-purple-400">取消</button>
-                    <button @click="addChecklistItem" class="flex-[2] py-4 bg-jp-purple-500 text-white rounded-2xl font-bold">完成</button>
+                    <button @click="addChecklistItem" class="flex-[2] py-4 bg-jp-purple-500 text-white rounded-2xl font-bold w-full shadow-lg">完成</button>
                 </div>
             </div>
         </div>
@@ -229,10 +257,9 @@ createApp({
         const itForm = ref({ name: '', time: '12:00', category: '景點', mapUrl: '', note: '' });
         const newChecklistItem = ref({ name: '', image: null });
         
-        // 分頁配置：icon 已更換為 shopping-basket
         const tabs = [
             { id: 'itinerary', icon: 'map' },
-            { id: 'checklist', icon: 'shopping-basket' }, 
+            { id: 'checklist', icon: 'shopping-basket' },
             { id: 'info', icon: 'info' }
         ];
 
@@ -254,9 +281,12 @@ createApp({
             return { weekday: date.toLocaleDateString('en-US', {weekday: 'short'}), dayNum: 11 + i, date: `2026-04-${11 + i}` };
         });
 
+        const infoItems = ref([
+            { id: 1, type: '航班資訊', title: '去程 CX412', content: 'Gate 26 / 航站 T1' },
+            { id: 2, type: '住宿資訊', title: '首爾飯店 (明洞)', content: '中區退溪路 123' }
+        ]);
         const itineraryData = ref([{ id: 1, date: '2026-04-11', category: '航班', time: '08:30', name: '香港 ➔ 首爾', note: '記得帶護照', mapUrl: '' }]);
-        const checklist = ref([]);
-        const infoItems = ref([{ id: 1, type: '住宿', title: '首爾飯店', content: '明洞區' }]);
+        const checklist = ref([{ id: 1, name: '感冒備用藥', done: false, image: null }]);
 
         const currentWeather = computed(() => weatherData[selectedDate.value]);
         const selectedDateDisplay = computed(() => {
@@ -290,6 +320,7 @@ createApp({
         };
 
         const saveItinerary = () => {
+            if(!itForm.value.name) return;
             if (isEditing.value) {
                 const idx = itineraryData.value.findIndex(i => i.id === itForm.value.id);
                 itineraryData.value[idx] = { ...itForm.value };
@@ -307,9 +338,10 @@ createApp({
         };
 
         const addChecklistItem = () => {
+            if(!newChecklistItem.value.name) return;
             checklist.value.push({ ...newChecklistItem.value, id: Date.now(), done: false });
-            showModal.value = false;
             newChecklistItem.value = { name: '', image: null };
+            showModal.value = false;
         };
 
         const deleteChecklistItem = (id) => { checklist.value = checklist.value.filter(i => i.id !== id); };
